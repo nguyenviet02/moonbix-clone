@@ -1,5 +1,41 @@
-body {
-  background: var(--tg-theme-secondary-bg-color, white);
-  padding: 0;
-  margin: 0;
+@import url(https://db.onlinewebfonts.com/c/d05c19ccecf7003d248c60ffd6b5e8f7?family=Binance+PLEX);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply !font-binancePlex;
+  }
+}
+
+@layer components {
+  .filter-gray {
+    filter: invert(59%) sepia(11%) saturate(410%) hue-rotate(176deg) brightness(93%) contrast(93%);
+  }
+  .filter-white {
+    filter: invert(100%) sepia(0%) saturate(7427%) hue-rotate(23deg) brightness(118%) contrast(118%);
+  }
+
+  .filter-yellow {
+    filter: invert(64%) sepia(97%) saturate(333%) hue-rotate(4deg) brightness(111%) contrast(98%);
+  }
+
+  .hideScroll {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .hideScroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bg-blur {
+    -webkit-backdrop-filter: blur(21.1000003815px);
+    backdrop-filter: blur(21.1000003815px);
+    background: hsla(0, 0%, 77%, 0.1);
+    border-radius: 16px;
+    box-shadow: inset 21.1px -21.1px 21.1px 0 hsla(0, 0%, 58%, 0.1), inset -21.1px 21.1px 21.1px 0 hsla(0, 0%, 100%, 0.1);
+  }
 }

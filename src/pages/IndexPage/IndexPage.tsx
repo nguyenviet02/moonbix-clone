@@ -1,40 +1,16 @@
-import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
+import MainMenu from '@/components/MainMenu/MainMenu';
 import type { FC } from 'react';
 
-import { Link } from '@/components/Link/Link.tsx';
-
-import tonSvg from './ton.svg';
-
+import { Outlet } from 'react-router-dom';
 export const IndexPage: FC = () => {
   return (
-    <List>
-      <Section
-        header='Features'
-        footer='You can use these pages to learn more about features, provided by Telegram Mini Apps and other useful projects'
-      >
-        <Link to='/ton-connect'>
-          <Cell
-            before={<Image src={tonSvg} style={{ backgroundColor: '#007AFF' }}/>}
-            subtitle='Connect your TON wallet'
-          >
-            TON Connect
-          </Cell>
-        </Link>
-      </Section>
-      <Section
-        header='Application Launch Data'
-        footer='These pages help developer to learn more about current launch information'
-      >
-        <Link to='/init-data'>
-          <Cell subtitle='User data, chat information, technical data'>Init Data</Cell>
-        </Link>
-        <Link to='/launch-params'>
-          <Cell subtitle='Platform identifier, Mini Apps version, etc.'>Launch Parameters</Cell>
-        </Link>
-        <Link to='/theme-params'>
-          <Cell subtitle='Telegram application palette information'>Theme Parameters</Cell>
-        </Link>
-      </Section>
-    </List>
+    <main className="w-screen h-screen max-h-screen max-w-[767px] flex flex-col justify-between items-center bg-[url('images/background.png')] bg-top bg-repeat-y bg-black bg-cover">
+      <section className="w-full h-full max-h-full overflow-y-auto flex-1 min-h-0 hideScroll bg-transparent">
+        <Outlet />
+      </section>
+      <div className="w-full min-h-fit h-[90px] max-h-[90px] shrink-0 flex justify-center items-end px-[15px] pb-5">
+        <MainMenu />
+      </div>
+    </main>
   );
 };
