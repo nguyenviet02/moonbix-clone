@@ -6,6 +6,7 @@ import { Navigate, Route, Router, Routes } from 'react-router-dom';
 
 import { routes } from '@/navigation/routes.tsx';
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
+import GamePage from '@/pages/GamePage/GamePage';
 
 export const App: FC = () => {
   const lp = useLaunchParams();
@@ -42,11 +43,11 @@ export const App: FC = () => {
       <Router location={location} navigator={reactNavigator}>
         <Routes>
           <Route path="/" element={<IndexPage />}>
-            <Route index element={<Navigate to="/game" />} />
+            <Route index element={<GamePage />} />
             {routes.map((route) => (
               <Route key={route.path} {...route} />
             ))}
-            <Route path="*" element={<Navigate to="/" />} />
+            {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </Route>
         </Routes>
       </Router>
