@@ -12,9 +12,9 @@
     "noUnusedParameters": true,
     "paths": {
       "@/*": ["./src/*"],
-      "icons/*": ["./src/icons/*"],
-      "images/*": ["./src/images/*"],
-      "components/*": ["./src/components/*"],
+      "icons/*": ["./src/media/icons/*"],
+      "images/*": ["./src/media/images/*"],
+      "components/*": ["./src/components/*"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
