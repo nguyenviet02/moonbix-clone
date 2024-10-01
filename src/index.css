@@ -38,4 +38,12 @@
     border-radius: 16px;
     box-shadow: inset 21.1px -21.1px 21.1px 0 hsla(0, 0%, 58%, 0.1), inset -21.1px 21.1px 21.1px 0 hsla(0, 0%, 100%, 0.1);
   }
+
+  .button-primary {
+    @apply bg-[#f8d33a] rounded-[30px] text-color-textBlack text-base font-bold h-12 leading-[46px];
+  }
+
+  .button-secondary {
+    @apply text-center  rounded-[30px] text-[#fcd535] text-base font-semibold h-12 leading-[46px] border border-[#fcd535] flex items-center justify-center pb-1;
+  }
 }

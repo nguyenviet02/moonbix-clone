@@ -26,12 +26,10 @@ const GamePage = () => {
         </div>
       </div>
       <div className="w-full">
-        <button className="w-full bg-[#f8d33a] rounded-[30px] text-color-textBlack text-base font-bold h-12 leading-[46px] mt-10">Play Game</button>
+        <button className="button-primary w-full mt-10">Play Game</button>
         <div className="w-full flex justify-between mt-4 gap-4">
-          <button className="w-full text-center flex-1 rounded-[30px] text-[#fcd535] text-base font-semibold h-12 leading-[46px] border border-[#fcd535] flex items-center justify-center pb-1">
-            Invite Friends for Bonuses
-          </button>
-          <button className="shrink-0 w-12 h-12 flex justify-center items-center border border-[#fcd535] rounded-full">
+          <button className="w-full flex-1 button-secondary">Invite Friends for Bonuses</button>
+          <button className="shrink-0 w-12 h-12 button-secondary pb-0">
             <img src={CopyIcon} alt="copy" className="filter-yellow w-6 h-6" />
           </button>
         </div>
