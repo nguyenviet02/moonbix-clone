@@ -4,8 +4,13 @@ import CopyIcon from 'icons/copy.svg';
 import TokenImage from 'images/token.png';
 import RocketImage from 'images/rocket.png';
 import { Link } from '@/components/Link/Link';
+import { useNavigate } from 'react-router-dom';
 
 const GamePage = () => {
+  const router = useNavigate();
+  const playGame = (level: number) => {
+    router(`/play-game/${level}`);
+  };
   return (
     <section className="w-full h-full min-h-fit px-[15px]">
       <header className="relative flex flex-col justify-center items-center pt-[15px]">
@@ -26,7 +31,9 @@ const GamePage = () => {
         </div>
       </div>
       <div className="w-full">
-        <button className="button-primary w-full mt-10">Play Game</button>
+        <button onClick={() => playGame(1)} className="button-primary w-full mt-10">
+          Play Game
+        </button>
         <div className="w-full flex justify-between mt-4 gap-4">
           <button className="w-full flex-1 button-secondary">Invite Friends for Bonuses</button>
           <button className="shrink-0 w-12 h-12 button-secondary pb-0">

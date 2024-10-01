@@ -7,6 +7,7 @@ import { Route, Router, Routes } from 'react-router-dom';
 import { routes } from '@/navigation/routes.tsx';
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import GamePage from '@/pages/GamePage/GamePage';
+import GameCanvas from '@/pages/GameCanvas/GameCanvas';
 
 export const App: FC = () => {
   const lp = useLaunchParams();
@@ -47,6 +48,9 @@ export const App: FC = () => {
             {routes.map((route) => (
               <Route key={route.path} {...route} />
             ))}
+          </Route>
+          <Route path="/play-game">
+            <Route index path=":level" element={<GameCanvas />} />
           </Route>
         </Routes>
       </Router>
