@@ -24,14 +24,14 @@ const HookAnimation = () => {
     height: 130,
     scale: 0.5,
   });
-  // ref
+  // Ref
   const stageRef = useRef<TStage>(null);
   const textScoreRef = useRef<Konva.Text>(null);
   const animationRef = useRef<IAnimationRef | null>(null);
   const spaceshipRef = useRef<IAnimationRef | null>(null);
   const layerRef = useRef<Konva.Layer>(null);
 
-  // image
+  // Image
   const [backgroundImageCanvas] = useImage(backgroundImage);
   const [hookImageCanvas] = useImage(hookImage);
   const [spaceshipImageCanvas] = useImage(spaceshipImage);
@@ -40,10 +40,10 @@ const HookAnimation = () => {
   const [iconSoundImageCanvas] = useImage(IconSound);
   const [iconMuteImageCanvas] = useImage(IconMute);
 
-  // state
+  // State
   const [isOpenSound, setIsOpenSound] = useState(true);
   const [isTextScoreVisible, setIsTextScoreVisible] = useState(false);
-  const [second, setSecond] = useState(60);
+  const [second, setSecond] = useState(10);
   const [isGameOver, setIsGameOver] = useState(false);
   const [positionSpaceship, setPositionSpaceship] = useState({ x: 0, y: 0 });
   const [hookLength, setHookLength] = useState(defaultHookLength);
