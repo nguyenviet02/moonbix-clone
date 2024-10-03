@@ -46,4 +46,5 @@
   .button-secondary {
     @apply text-center  rounded-[30px] text-[#fcd535] text-base font-semibold h-12 leading-[46px] border border-[#fcd535] flex items-center justify-center pb-1;
   }
+
 }

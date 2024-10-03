@@ -8,6 +8,7 @@ import { routes } from '@/navigation/routes.tsx';
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import GamePage from '@/pages/GamePage/GamePage';
 import GameCanvas from '@/pages/GameCanvas/GameCanvas';
+import GameOver from '@/pages/GameOver/GameOver';
 
 export const App: FC = () => {
   const lp = useLaunchParams();
@@ -52,6 +53,7 @@ export const App: FC = () => {
           <Route path="/play-game">
             <Route index path=":level" element={<GameCanvas />} />
           </Route>
+          <Route path="/game-over" element={<GameOver />}></Route>
         </Routes>
       </Router>
     </AppRoot>

@@ -1,6 +1,6 @@
 import type { ComponentType, JSX } from 'react';
 
-import GamePage from '@/pages/GamePage/GamePage';
+// import GamePage from '@/pages/GamePage/GamePage';
 import LeaderboardPage from '@/pages/LeaderboardPage/LeaderboardPage';
 import TasksPage from '@/pages/TasksPage/TasksPage';
 import FriendsPage from '@/pages/FriendsPage/FriendsPage';
@@ -14,7 +14,6 @@ interface Route {
 }
 
 export const routes: Route[] = [
-  { path: '/game', Component: GamePage, title: 'Game Page' },
   { path: '/leaderboard', Component: LeaderboardPage, title: 'Leaderboard Page' },
   { path: '/tasks', Component: TasksPage, title: 'Tasks Page' },
   { path: '/friends', Component: FriendsPage, title: 'Friends Page' },

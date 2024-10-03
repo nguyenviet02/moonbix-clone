@@ -8,11 +8,12 @@ import FriendsIcon from 'icons/friends.svg';
 import BinanceIcon from 'icons/binance.svg';
 const MainMenu = () => {
   const location = useLocation();
+  console.log('☠️ ~ MainMenu ~ location:', location)
   const menuItem = [
     {
       name: 'Game',
       icon: GameIcon,
-      link: '/game',
+      link: '/',
     },
     {
       name: 'Leaderboard',

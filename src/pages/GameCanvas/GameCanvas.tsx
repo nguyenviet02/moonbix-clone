@@ -13,8 +13,11 @@ import IconMute from 'images/icon-mute.png';
 import { IAnimationRef, ICropHookImage, TObjectProperties } from '@/types/type';
 import ObjectComp from '@/components/Game/Object';
 import { listObjects } from '@/apis/gameApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const HookAnimation = () => {
+  const params = useParams();
+  const navigate = useNavigate();
   const defaultHookLength = 15;
   const spaceshipSize = useRef({
     width: 160,
@@ -26,6 +29,7 @@ const HookAnimation = () => {
   const textScoreRef = useRef<Konva.Text>(null);
   const animationRef = useRef<IAnimationRef | null>(null);
   const spaceshipRef = useRef<IAnimationRef | null>(null);
+  const layerRef = useRef<Konva.Layer>(null);
 
   // image
   const [backgroundImageCanvas] = useImage(backgroundImage);
@@ -39,6 +43,8 @@ const HookAnimation = () => {
   // state
   const [isOpenSound, setIsOpenSound] = useState(true);
   const [isTextScoreVisible, setIsTextScoreVisible] = useState(false);
+  const [second, setSecond] = useState(60);
+  const [isGameOver, setIsGameOver] = useState(false);
   const [positionSpaceship, setPositionSpaceship] = useState({ x: 0, y: 0 });
   const [hookLength, setHookLength] = useState(defaultHookLength);
   const [retractSpeed, setRetractSpeed] = useState(5);
@@ -54,9 +60,11 @@ const HookAnimation = () => {
     y: 0,
   });
   const [collectedObject, setCollectedObject] = useState<{ point: number; id: number } | null>(null);
-  const [totalPoint, setTotalPoint] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
 
-  const [objectList, setObjectList] = useState<TObjectProperties[]>(listObjects);
+  const deepCloneListObjects = listObjects.map((object) => ({ ...object }));
+
+  const [objectList, setObjectList] = useState<TObjectProperties[]>(deepCloneListObjects);
 
   const fluctuateHook = useCallback(() => {
     const animation = new Konva.Animation((frame) => {
@@ -104,6 +112,31 @@ const HookAnimation = () => {
     return false;
   }, []);
 
+  const handleCollectObject = useCallback((point: number, id: number, speed: number) => {
+    setCollectedObject({ point, id });
+    setRetractSpeed(speed);
+  }, []);
+
+  const handleSound = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault();
+    e.cancelBubble = true;
+    setIsOpenSound((prev) => !prev);
+  }, []);
+
+  const hookX = useMemo(() => {
+    return window.innerWidth / 2;
+  }, []);
+  const hookY = useMemo(() => {
+    return positionSpaceship?.y - 5 + spaceshipSize?.current?.height * spaceshipSize?.current?.scale;
+  }, [positionSpaceship]);
+  const lineEndX = useMemo(() => {
+    return hookX + hookLength * Math.cos((angle * Math.PI) / 180);
+  }, [hookLength, angle]); // X position based on the angle and length
+  const lineEndY = useMemo(() => {
+    return hookY + hookLength * Math.sin((angle * Math.PI) / 180);
+  }, [hookLength, angle]); // Y position based on the angle and length
+
+  //* Handle fluctuation of the hook
   useEffect(() => {
     if (isFluctuating) {
       setCropHookImage({
@@ -115,12 +148,11 @@ const HookAnimation = () => {
       animationRef.current?.start();
     }
   }, [isFluctuating]);
-
   useEffect(() => {
     fluctuateHook();
   }, []);
 
-  // Handle extending the hook
+  //* Handle extending the hook
   useEffect(() => {
     if (extendHook) {
       const anim = new Konva.Animation(() => {
@@ -149,7 +181,7 @@ const HookAnimation = () => {
     return () => {};
   }, [extendHook, hookLength, angle]);
 
-  // Handle retraction of the hook
+  //* Handle retraction of the hook
   useEffect(() => {
     if (retracting) {
       const anim = new Konva.Animation(() => {
@@ -158,8 +190,8 @@ const HookAnimation = () => {
         } else {
           if (collectedObject?.id) {
             // Get point from object and remove it from the layer
-            const newTotalPoint = totalPoint + collectedObject?.point;
-            setTotalPoint(newTotalPoint < 0 ? 0 : newTotalPoint);
+            const newTotalScore = totalScore + collectedObject?.point;
+            setTotalScore(newTotalScore < 0 ? 0 : newTotalScore);
             setObjectList((prev) => prev.filter((object) => object.id !== collectedObject.id));
             setRetractSpeed(5);
             setIsTextScoreVisible(true);
@@ -178,7 +210,7 @@ const HookAnimation = () => {
     return () => {};
   }, [retracting, hookLength, collectedObject]);
 
-  // Handle collision with object
+  //* Handle collision with object
   useEffect(() => {
     if (!isCollideWithObject) {
       return;
@@ -193,6 +225,7 @@ const HookAnimation = () => {
     });
   }, [isCollideWithObject]);
 
+  //* Set spaceship position
   useEffect(() => {
     setPositionSpaceship({
       x: window.innerWidth / 2 - 5,
@@ -203,8 +236,9 @@ const HookAnimation = () => {
     floatSpaceship();
   }, []);
 
+  //* Show score when collect object
   useEffect(() => {
-    if (totalPoint === 0) {
+    if (totalScore === 0) {
       return;
     }
     textScoreRef.current?.to({
@@ -221,116 +255,122 @@ const HookAnimation = () => {
         setIsTextScoreVisible(false);
       },
     });
-  }, [totalPoint]);
+  }, [totalScore]);
 
-  const handleCollectObject = useCallback((point: number, id: number, speed: number) => {
-    setCollectedObject({ point, id });
-    setRetractSpeed(speed);
+  //* Handle time
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecond((prev) => (prev - 1 > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const handleSound = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
-    e.evt.preventDefault();
-    e.cancelBubble = true;
-    setIsOpenSound((prev) => !prev);
-  }, []);
-
-  const hookX = useMemo(() => {
-    return window.innerWidth / 2;
-  }, []);
-  const hookY = useMemo(() => {
-    return positionSpaceship?.y - 5 + spaceshipSize?.current?.height * spaceshipSize?.current?.scale;
-  }, [positionSpaceship]);
-  const lineEndX = useMemo(() => {
-    return hookX + hookLength * Math.cos((angle * Math.PI) / 180);
-  }, [hookLength, angle]); // X position based on the angle and length
-  const lineEndY = useMemo(() => {
-    return hookY + hookLength * Math.sin((angle * Math.PI) / 180);
-  }, [hookLength, angle]); // Y position based on the angle and length
+  //* Handle game over
+  useEffect(() => {
+    if (second === 0) {
+      animationRef.current?.stop();
+      spaceshipRef.current?.stop();
+      setIsFluctuating(false);
+      setExtendHook(false);
+      setRetracting(false);
+      setTimeout(() => {
+        navigate('/game-over', { replace: true, state: { totalScore, level: params?.level } });
+      }, 1000);
+    }
+  }, [second]);
+  useEffect(() => {
+    if (objectList.length === 0) {
+      setIsGameOver(true);
+    }
+  }, [objectList]);
 
   return (
-    <Stage ref={stageRef} width={window.innerWidth} height={window.innerHeight} onClick={handleStageClick}>
-      <Layer>
-        <Image
-          offset={{
-            x: 100,
-            y: 400,
-          }}
-          image={backgroundImageCanvas}
-        />
+    <>
+      <Stage visible={!isGameOver} ref={stageRef} width={window.innerWidth} height={window.innerHeight} onClick={handleStageClick}>
+        <Layer>
+          <Image
+            offset={{
+              x: 100,
+              y: 400,
+            }}
+            image={backgroundImageCanvas}
+          />
 
-        {isOpenSound ? (
-          <Image onClick={handleSound} x={10} y={15} image={iconSoundImageCanvas} width={20} height={20} />
-        ) : (
-          <Image onClick={handleSound} x={10} y={15} image={iconMuteImageCanvas} width={20} height={20} />
-        )}
+          {isOpenSound ? (
+            <Image onClick={handleSound} x={10} y={15} image={iconSoundImageCanvas} width={20} height={20} />
+          ) : (
+            <Image onClick={handleSound} x={10} y={15} image={iconMuteImageCanvas} width={20} height={20} />
+          )}
 
-        {/* Time */}
-        <Rect x={window.innerWidth - 100} y={10} width={100} height={40} fill="#181A20" cornerRadius={[40, 0, 0, 40]} />
-        <Image x={window.innerWidth - 90} y={15} image={iconTimerImageCanvas} width={25} height={25} />
-        <Text text={'45 s'} fontSize={18} fill={'white'} x={window.innerWidth - 60} y={20} fontStyle="bold" />
+          {/* Time */}
+          <Rect x={window.innerWidth - 100} y={10} width={100} height={40} fill="#181A20" cornerRadius={[40, 0, 0, 40]} />
+          <Image x={window.innerWidth - 90} y={15} image={iconTimerImageCanvas} width={25} height={25} />
+          <Text text={`${second} s`} fontSize={18} fill={'white'} x={window.innerWidth - 60} y={20} fontStyle="bold" />
 
-        {/* Point */}
-        <Rect x={window.innerWidth - 100} y={60} width={100} height={40} fill="#181A20" cornerRadius={[40, 0, 0, 40]} />
-        <Image x={window.innerWidth - 90} y={68} image={iconScoreImageCanvas} width={25} height={25} />
-        <Text text={totalPoint?.toString()} fontSize={18} fill={'white'} x={window.innerWidth - 60} y={72} fontStyle="bold" />
-      </Layer>
-      <Layer>
-        {/* Spaceship image */}
-        <Image
-          x={positionSpaceship.x}
-          y={positionSpaceship.y}
-          image={spaceshipImageCanvas}
-          width={spaceshipSize?.current?.width}
-          height={spaceshipSize?.current?.height}
-          scale={{
-            x: spaceshipSize?.current?.scale,
-            y: spaceshipSize?.current?.scale,
-          }}
-          offsetX={80}
-        />
-        {objectList.map((object) => (
-          <ObjectComp
-            key={object.id}
-            objectProperties={object}
-            positionHookX={lineEndX}
-            positionHookY={lineEndY + (cropHookImage.height * 0.15) / 2}
-            stageRef={stageRef}
-            onCollect={() => handleCollectObject(object?.point, object?.id, object?.speed)}
-            isCollecting={collectedObject?.id === object?.id}
-            setIsCollideWithObject={setIsCollideWithObject}
+          {/* Point */}
+          <Rect x={window.innerWidth - 100} y={60} width={100} height={40} fill="#181A20" cornerRadius={[40, 0, 0, 40]} />
+          <Image x={window.innerWidth - 90} y={68} image={iconScoreImageCanvas} width={25} height={25} />
+          <Text text={totalScore?.toString()} fontSize={18} fill={'white'} x={window.innerWidth - 60} y={72} fontStyle="bold" />
+        </Layer>
+        <Layer ref={layerRef}>
+          {/* Spaceship image */}
+          <Image
+            x={positionSpaceship.x}
+            y={positionSpaceship.y}
+            image={spaceshipImageCanvas}
+            width={spaceshipSize?.current?.width}
+            height={spaceshipSize?.current?.height}
+            scale={{
+              x: spaceshipSize?.current?.scale,
+              y: spaceshipSize?.current?.scale,
+            }}
+            offsetX={80}
+          />
+          {objectList?.map((object) => (
+            <ObjectComp
+              key={object.id}
+              objectProperties={object}
+              positionHookX={lineEndX}
+              positionHookY={lineEndY + (cropHookImage.height * 0.15) / 2}
+              stageRef={stageRef}
+              onCollect={() => handleCollectObject(object?.point, object?.id, object?.speed)}
+              isCollecting={collectedObject?.id === object?.id}
+              setIsCollideWithObject={setIsCollideWithObject}
+              rotation={angle - 90}
+            />
+          ))}
+          {/* Line representing the hook */}
+          <Line points={[hookX, hookY, lineEndX, lineEndY]} stroke="white" strokeWidth={2} />
+          {/* Hook image */}
+          <Image
+            x={lineEndX}
+            y={lineEndY}
+            image={hookImageCanvas}
+            crop={cropHookImage}
+            width={cropHookImage.width}
+            scale={{
+              x: 0.15,
+              y: 0.15,
+            }}
+            offsetX={cropHookImage.width / 2}
             rotation={angle - 90}
           />
-        ))}
-        {/* Line representing the hook */}
-        <Line points={[hookX, hookY, lineEndX, lineEndY]} stroke="white" strokeWidth={2} />
-        {/* Hook image */}
-        <Image
-          x={lineEndX}
-          y={lineEndY}
-          image={hookImageCanvas}
-          crop={cropHookImage}
-          width={cropHookImage.width}
-          scale={{
-            x: 0.15,
-            y: 0.15,
-          }}
-          offsetX={cropHookImage.width / 2}
-          rotation={angle - 90}
-        />
-        <Text
-          text={collectedObject?.point && collectedObject?.point > 0 ? `+${collectedObject?.point}` : collectedObject?.point.toString()}
-          visible={isTextScoreVisible}
-          fontSize={16}
-          ref={textScoreRef}
-          fill={'white'}
-          x={window.innerWidth / 2 - 20}
-          y={140}
-          fontStyle="800"
-          stroke={'black'}
-          strokeWidth={0.9}
-        />
-      </Layer>
-    </Stage>
+          <Text
+            text={collectedObject?.point && collectedObject?.point > 0 ? `+${collectedObject?.point}` : collectedObject?.point.toString()}
+            visible={isTextScoreVisible}
+            fontSize={16}
+            ref={textScoreRef}
+            fill={'white'}
+            x={window.innerWidth / 2 - 20}
+            y={140}
+            fontStyle="800"
+            stroke={'black'}
+            strokeWidth={0.9}
+          />
+        </Layer>
+      </Stage>
+    </>
   );
 };
 

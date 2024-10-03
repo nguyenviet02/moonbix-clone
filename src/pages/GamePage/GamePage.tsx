@@ -7,9 +7,9 @@ import { Link } from '@/components/Link/Link';
 import { useNavigate } from 'react-router-dom';
 
 const GamePage = () => {
-  const router = useNavigate();
+  const navigate = useNavigate();
   const playGame = (level: number) => {
-    router(`/play-game/${level}`);
+    navigate(`/play-game/${level}`);
   };
   return (
     <section className="w-full h-full min-h-fit px-[15px]">
