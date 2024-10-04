@@ -9,6 +9,7 @@ import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import GamePage from '@/pages/GamePage/GamePage';
 import GameCanvas from '@/pages/GameCanvas/GameCanvas';
 import GameOver from '@/pages/GameOver/GameOver';
+import RecordsPage from '@/pages/RecordsPage/RecordsPage';
 
 export const App: FC = () => {
   const lp = useLaunchParams();
@@ -54,6 +55,7 @@ export const App: FC = () => {
             <Route index path=":level" element={<GameCanvas />} />
           </Route>
           <Route path="/game-over" element={<GameOver />}></Route>
+          <Route path="/my-records" element={<RecordsPage />}></Route>
         </Routes>
       </Router>
     </AppRoot>

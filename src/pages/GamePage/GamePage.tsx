@@ -13,6 +13,10 @@ const GamePage = () => {
   const playGame = (level: number) => {
     navigate(`/play-game/${level}`);
   };
+  const viewRecord = () => {
+		console.log('viewRecord');
+    navigate('/my-records');
+  };
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +31,9 @@ const GamePage = () => {
         <header className="relative flex flex-col justify-center items-center pt-[15px]">
           <img src={BinanceLogo} alt="Binance Logo" className="w-[45px] h-[45px] filter-yellow" />
           <img src={BinanceText} alt="Binance Text" className="w-[268px] h-[48px]" />
-          <button className="bg-[#ffffff26] px-3 py-[9px] rounded-[30px] flex justify-center items-center text-white leading-5 absolute top-3 right-0">My Records</button>
+          <button onClick={viewRecord} className="bg-[#ffffff26] px-3 py-[9px] rounded-[30px] flex justify-center items-center text-white leading-5 absolute top-3 right-0">
+            My Records
+          </button>
         </header>
         <div className="min-h-[220px] w-full flex flex-col items-center mt-10 pt-[42px] px-[22px] pb-[20px] bg-blur">
           <div className="flex justify-center items-center">
