@@ -43,7 +43,7 @@ const HookAnimation = () => {
   // State
   const [isOpenSound, setIsOpenSound] = useState(true);
   const [isTextScoreVisible, setIsTextScoreVisible] = useState(false);
-  const [second, setSecond] = useState(10);
+  const [second, setSecond] = useState(30);
   const [isGameOver, setIsGameOver] = useState(false);
   const [positionSpaceship, setPositionSpaceship] = useState({ x: 0, y: 0 });
   const [hookLength, setHookLength] = useState(defaultHookLength);
@@ -287,7 +287,7 @@ const HookAnimation = () => {
 
   return (
     <>
-      <Stage visible={!isGameOver} ref={stageRef} width={window.innerWidth} height={window.innerHeight} onClick={handleStageClick}>
+      <Stage visible={!isGameOver} ref={stageRef} width={window.innerWidth} height={window.innerHeight} onClick={handleStageClick} onTap={handleStageClick}>
         <Layer>
           <Image
             offset={{
