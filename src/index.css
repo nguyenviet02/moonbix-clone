@@ -47,4 +47,40 @@
     @apply text-center  rounded-[30px] text-[#fcd535] text-base font-semibold h-12 leading-[46px] border border-[#fcd535] flex items-center justify-center pb-1;
   }
 
+  .loading-line {
+    animation: jump-scaleY 1.5s linear infinite;
+    background-color: #fcd535;
+    height: 8px;
+    transform-origin: top;
+    width: 4px;
+  }
+
+  @keyframes jump-scaleY {
+    0% {
+      transform: translateY(0) scaleY(1);
+    }
+
+    7.5% {
+      transform: translateY(-120%) scaleY(2);
+    }
+
+    15%,
+    35% {
+      transform: translateY(-120%) scaleY(0.5);
+    }
+
+    43.5% {
+      transform: translateY(0) scaleY(2);
+    }
+
+    52.5%,
+    72.5% {
+      transform: translateY(120%) scaleY(0.5);
+    }
+
+    80%,
+    to {
+      transform: translateY(0) scaleY(1);
+    }
+  }
 }

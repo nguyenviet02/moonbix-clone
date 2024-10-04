@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0",
     "react-konva": "^18.2.10",
     "react-router-dom": "^6.23.0",
+    "tailwindcss-animation-delay": "^2.0.1",
     "use-image": "^1.1.1",
     "vite-plugin-svgr": "^4.2.0"
   },

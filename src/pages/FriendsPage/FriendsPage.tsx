@@ -1,6 +1,8 @@
 import FriendImage from 'images/friends.png';
 import TokenImage from 'images/token.png';
 import CopyIcon from 'icons/copy.svg';
+import { useEffect, useState } from 'react';
+import Loading from '@/components/Loading/Loading';
 
 const FriendsPage = () => {
   const listFriends = [
@@ -45,6 +47,14 @@ const FriendsPage = () => {
       name: 'Jane Doe',
     },
   ];
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="size-full px-[15px] pt-6 flex flex-col items-center">
       <h1 className="text-[20px] leading-7 font-semibold text-center text-color-PrimaryText flex justify-center items-center gap-1">
@@ -87,14 +97,16 @@ const FriendsPage = () => {
         <p className="w-10 shrink-0 text-center">No.</p>
         <p className="w-full flex-1">Friend&apos;s name</p>
       </div>
-      <div className="w-full h-fit flex-1 min-h-0 overflow-y-auto hideScroll">
-        {listFriends.map((friend) => (
-          <div key={friend.id} className="w-full flex items-center gap-1 text-[14px] leading-[22px] text-color-textWhite p-2">
-            <p className="w-10 shrink-0 text-center">{friend.id}</p>
-            <p className="w-full flex-1">{friend.name}</p>
-          </div>
-        ))}
-      </div>
+      <Loading isLoading={isLoading}>
+        <div className="w-full h-fit flex-1 min-h-0 overflow-y-auto hideScroll">
+          {listFriends.map((friend) => (
+            <div key={friend.id} className="w-full flex items-center gap-1 text-[14px] leading-[22px] text-color-textWhite p-2">
+              <p className="w-10 shrink-0 text-center">{friend.id}</p>
+              <p className="w-full flex-1">{friend.name}</p>
+            </div>
+          ))}
+        </div>
+      </Loading>
       <p className="w-full text-color-TertiaryText text-[12px] leading-[18px] mt-1 mb-2 font-medium">Displaying the most recent 300 records only</p>
       <div className="w-full flex justify-between gap-4">
         <button className="w-full flex-1 button-secondary bg-[#f8d33a] text-black">Invite Friends for Bonuses</button>

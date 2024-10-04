@@ -1,7 +1,10 @@
 import TokenImage from 'images/token.png';
 import CopyIcon from 'icons/copy.svg';
+import Loading from '@/components/Loading/Loading';
+import { useEffect, useState } from 'react';
 
 const LeaderboardPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const listPlayers = [
     {
       id: 1,
@@ -64,6 +67,12 @@ const LeaderboardPage = () => {
       points: 99990,
     },
   ];
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="px-[15px] py-6 pb-0 flex flex-col items-center h-full w-full">
       {/* Title */}
@@ -74,27 +83,29 @@ const LeaderboardPage = () => {
       <div className="w-full flex justify-between items-center text-[12px] leading-[18px] text-color-textThird mt-10 mb-2 ">
         <p>17,539,464 Players</p>
         <p>Total points earned</p>
-      </div>
-      <div className="w-full leading-[22px] flex text-[14px] text-color-PrimaryText bg-[#785d06] p-2 mb-2 rounded-lg">
-        <p className="w-10 text-center">100+</p>
-        <p className="flex-1 w-full ml-[10px]">Me</p>
-        <div className="w-fit shrink-0 flex items-center">
-          <img src={TokenImage} alt="img" className="w-5 h-5 object-contain" />
-          <p className="ml-1 w-fit shrink-0 text-[12px] leading-5">99,999</p>
-        </div>
-      </div>
-      <div className="w-full flex-1 min-h-0 overflow-y-auto hideScroll">
-        {listPlayers.map((player) => (
-          <div key={player.id} className="w-full leading-[22px] flex text-[14px] text-color-textPrimary p-2 mb-2 rounded-lg">
-            <p className="w-10 text-center shrink-0">{player.ranking}</p>
-            <p className="flex-1 w-full ml-[10px]">{player.name}</p>
-            <div className="w-fit shrink-0 flex items-center">
-              <img src={TokenImage} alt="img" className="w-5 h-5 object-contain shrink-0" />
-              <p className="ml-1 w-fit shrink-0 text-[12px] leading-5">{player.points}</p>
-            </div>
+      </div>	
+      <Loading isLoading={isLoading}>
+        <div className="w-full leading-[22px] flex text-[14px] text-color-PrimaryText bg-[#785d06] p-2 mb-2 rounded-lg">
+          <p className="w-10 text-center">100+</p>
+          <p className="flex-1 w-full ml-[10px]">Me</p>
+          <div className="w-fit shrink-0 flex items-center">
+            <img src={TokenImage} alt="img" className="w-5 h-5 object-contain" />
+            <p className="ml-1 w-fit shrink-0 text-[12px] leading-5">99,999</p>
           </div>
-        ))}
-      </div>
+        </div>
+        <div className="w-full flex-1 min-h-0 overflow-y-auto hideScroll">
+          {listPlayers.map((player) => (
+            <div key={player.id} className="w-full leading-[22px] flex text-[14px] text-color-textPrimary p-2 mb-2 rounded-lg">
+              <p className="w-10 text-center shrink-0">{player.ranking}</p>
+              <p className="flex-1 w-full ml-[10px]">{player.name}</p>
+              <div className="w-fit shrink-0 flex items-center">
+                <img src={TokenImage} alt="img" className="w-5 h-5 object-contain shrink-0" />
+                <p className="ml-1 w-fit shrink-0 text-[12px] leading-5">{player.points}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Loading>
       <div className="w-full my-2 text-[#4f5867] flex justify-between items-center text-[12px] leading-[18px] font-medium">
         <p>Updated every 10 mins</p>
         <p>Last updated: 2024-10-03 09:04</p>
