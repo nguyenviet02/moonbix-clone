@@ -27,11 +27,11 @@ const GamePage = () => {
   }, []);
   return (
     <Loading isLoading={isLoading}>
-      <section className="w-full h-full min-h-fit px-[15px]">
-        <header className="relative flex flex-col justify-center items-center pt-[15px]">
+      <section className="relative w-full h-full min-h-fit px-[15px] flex flex-col items-center justify-center">
+        <header className="w-full flex flex-col justify-center items-center pt-[15px]">
           <img src={BinanceLogo} alt="Binance Logo" className="w-[45px] h-[45px] filter-yellow" />
           <img src={BinanceText} alt="Binance Text" className="w-[268px] h-[48px]" />
-          <button onClick={viewRecord} className="bg-[#ffffff26] px-3 py-[9px] rounded-[30px] flex justify-center items-center text-white leading-5 absolute top-3 right-0">
+          <button onClick={viewRecord} className="bg-[#ffffff26] px-3 py-[9px] rounded-[30px] flex justify-center items-center text-white leading-5 absolute top-3 right-4">
             My Records
           </button>
         </header>
