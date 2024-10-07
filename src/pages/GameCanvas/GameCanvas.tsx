@@ -10,10 +10,13 @@ import IconScore from 'images/icon-score.png';
 import IconTimer from 'images/icon-timer.png';
 import IconSound from 'images/icon-sound.png';
 import IconMute from 'images/icon-mute.png';
+import starBlueGif from 'images/star-blue.gif';
+import starPurpleGif from 'images/star-purple.gif';
 import { IAnimationRef, ICropHookImage, TObjectProperties } from '@/types/type';
 import ObjectComp from '@/components/Game/Object';
 import { listObjects } from '@/apis/gameApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import GIF from '@/components/GIF/GIF';
 
 const HookAnimation = () => {
   const params = useParams();
@@ -43,7 +46,7 @@ const HookAnimation = () => {
   // State
   const [isOpenSound, setIsOpenSound] = useState(true);
   const [isTextScoreVisible, setIsTextScoreVisible] = useState(false);
-  const [second, setSecond] = useState(30);
+  const [second, setSecond] = useState(90);
   const [isGameOver, setIsGameOver] = useState(false);
   const [positionSpaceship, setPositionSpaceship] = useState({ x: 0, y: 0 });
   const [hookLength, setHookLength] = useState(defaultHookLength);
@@ -302,6 +305,9 @@ const HookAnimation = () => {
           ) : (
             <Image onClick={handleSound} x={10} y={15} image={iconMuteImageCanvas} width={20} height={20} />
           )}
+
+          <GIF src={starBlueGif} x={window.innerWidth - 90} y={180} />
+					<GIF src={starPurpleGif} x={60} y={100} />
 
           {/* Time */}
           <Rect x={window.innerWidth - 100} y={10} width={100} height={40} fill="#181A20" cornerRadius={[40, 0, 0, 40]} />
